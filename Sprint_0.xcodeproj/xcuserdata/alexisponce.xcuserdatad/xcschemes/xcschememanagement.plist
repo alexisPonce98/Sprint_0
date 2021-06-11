@@ -4,10 +4,58 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Sprint_0.xcscheme_^#shared#^_</key>
+		<key>HeartRate (Complication).xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>HeartRate (Notification).xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+		<key>HeartRate.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>Sprint_0.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>B09AA3E726719155007C2108</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B09AA40026719157007C2108</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B09AA40B26719157007C2108</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B0A5CA822672FEC900305BA9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B0A5CAA32672FECC00305BA9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B0A5CAAE2672FECC00305BA9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

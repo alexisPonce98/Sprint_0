@@ -66,7 +66,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lS0-BI-h44">
-                                <rect key="frame" x="277" y="139" width="42" height="21"/>
+                                <rect key="frame" x="277" y="139" width="84" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -76,6 +76,18 @@
                                 <rect key="frame" x="29" y="205" width="332" height="186"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </mapView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ZYY-Qc-n3q">
+                                <rect key="frame" x="30" y="424" width="317" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="OFF"/>
+                                    <segment title="Start Wokrout"/>
+                                    <segment title="End Workout"/>
+                                </segments>
+                                <connections>
+                                    <action selector="creatingWorkouts:" destination="BYZ-38-t0r" eventType="valueChanged" id="dFj-cY-6Vq"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -86,6 +98,7 @@
                         <outlet property="long" destination="dJy-Y4-3h5" id="Ak3-LT-Ntr"/>
                         <outlet property="map" destination="37G-zm-EbG" id="6QQ-JB-TQR"/>
                         <outlet property="temperature" destination="lS0-BI-h44" id="12N-23-mp3"/>
+                        <outlet property="workoutSeg" destination="ZYY-Qc-n3q" id="Usd-xQ-s65"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

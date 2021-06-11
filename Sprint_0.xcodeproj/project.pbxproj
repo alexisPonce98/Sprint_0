@@ -18,6 +18,18 @@
 		B09AA41126719157007C2108 /* Sprint_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09AA41026719157007C2108 /* Sprint_0UITests.swift */; };
 		B09AA41F267193CA007C2108 /* Random route.gpx in Resources */ = {isa = PBXBuildFile; fileRef = B09AA41E267193CA007C2108 /* Random route.gpx */; };
 		B09AA423267193E4007C2108 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B09AA422267193E4007C2108 /* HealthKit.framework */; };
+		B0A5CA872672FEC900305BA9 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A5CA852672FEC900305BA9 /* Interface.storyboard */; };
+		B0A5CA892672FECA00305BA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0A5CA882672FECA00305BA9 /* Assets.xcassets */; };
+		B0A5CA902672FECB00305BA9 /* HeartRate Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = B0A5CA8F2672FECB00305BA9 /* HeartRate Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B0A5CA952672FECB00305BA9 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A5CA942672FECB00305BA9 /* InterfaceController.swift */; };
+		B0A5CA972672FECB00305BA9 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A5CA962672FECB00305BA9 /* ExtensionDelegate.swift */; };
+		B0A5CA992672FECB00305BA9 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A5CA982672FECB00305BA9 /* NotificationController.swift */; };
+		B0A5CA9B2672FECB00305BA9 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A5CA9A2672FECB00305BA9 /* ComplicationController.swift */; };
+		B0A5CA9D2672FECC00305BA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0A5CA9C2672FECC00305BA9 /* Assets.xcassets */; };
+		B0A5CAA92672FECC00305BA9 /* HeartRateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A5CAA82672FECC00305BA9 /* HeartRateTests.swift */; };
+		B0A5CAB42672FECC00305BA9 /* HeartRateUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A5CAB32672FECC00305BA9 /* HeartRateUITests.swift */; };
+		B0A5CAB82672FECC00305BA9 /* HeartRate.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = B0A5CA832672FEC900305BA9 /* HeartRate.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B0A5CAC926733E5400305BA9 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0A5CAC826733E5400305BA9 /* HealthKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,7 +47,60 @@
 			remoteGlobalIDString = B09AA3E726719155007C2108;
 			remoteInfo = Sprint_0;
 		};
+		B0A5CA912672FECB00305BA9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B09AA3E026719155007C2108 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B0A5CA8E2672FECB00305BA9;
+			remoteInfo = "HeartRate Extension";
+		};
+		B0A5CAA52672FECC00305BA9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B09AA3E026719155007C2108 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B0A5CA8E2672FECB00305BA9;
+			remoteInfo = "HeartRate Extension";
+		};
+		B0A5CAB02672FECC00305BA9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B09AA3E026719155007C2108 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B0A5CA822672FEC900305BA9;
+			remoteInfo = HeartRate;
+		};
+		B0A5CAB62672FECC00305BA9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B09AA3E026719155007C2108 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B0A5CA822672FEC900305BA9;
+			remoteInfo = HeartRate;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B0A5CAB92672FECC00305BA9 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				B0A5CAB82672FECC00305BA9 /* HeartRate.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0A5CABC2672FECC00305BA9 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				B0A5CA902672FECB00305BA9 /* HeartRate Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		B09AA3E826719155007C2108 /* Sprint_0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sprint_0.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,6 +121,26 @@
 		B09AA41E267193CA007C2108 /* Random route.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Random route.gpx"; sourceTree = "<group>"; };
 		B09AA420267193E4007C2108 /* Sprint_0.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sprint_0.entitlements; sourceTree = "<group>"; };
 		B09AA422267193E4007C2108 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		B0A5CA832672FEC900305BA9 /* HeartRate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeartRate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0A5CA862672FEC900305BA9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		B0A5CA882672FECA00305BA9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B0A5CA8A2672FECA00305BA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B0A5CA8F2672FECB00305BA9 /* HeartRate Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "HeartRate Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0A5CA942672FECB00305BA9 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		B0A5CA962672FECB00305BA9 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		B0A5CA982672FECB00305BA9 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		B0A5CA9A2672FECB00305BA9 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		B0A5CA9C2672FECC00305BA9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B0A5CA9E2672FECC00305BA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B0A5CA9F2672FECC00305BA9 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		B0A5CAA42672FECC00305BA9 /* HeartRateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HeartRateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0A5CAA82672FECC00305BA9 /* HeartRateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateTests.swift; sourceTree = "<group>"; };
+		B0A5CAAA2672FECC00305BA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B0A5CAAF2672FECC00305BA9 /* HeartRateUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HeartRateUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0A5CAB32672FECC00305BA9 /* HeartRateUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateUITests.swift; sourceTree = "<group>"; };
+		B0A5CAB52672FECC00305BA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B0A5CAC726733E5400305BA9 /* HeartRate Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "HeartRate Extension.entitlements"; sourceTree = "<group>"; };
+		B0A5CAC826733E5400305BA9 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS7.4.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +166,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B0A5CA8C2672FECB00305BA9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0A5CAC926733E5400305BA9 /* HealthKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0A5CAA12672FECC00305BA9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0A5CAAC2672FECC00305BA9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -90,6 +197,10 @@
 				B09AA3EA26719155007C2108 /* Sprint_0 */,
 				B09AA40426719157007C2108 /* Sprint_0Tests */,
 				B09AA40F26719157007C2108 /* Sprint_0UITests */,
+				B0A5CA842672FEC900305BA9 /* HeartRate */,
+				B0A5CA932672FECB00305BA9 /* HeartRate Extension */,
+				B0A5CAA72672FECC00305BA9 /* HeartRateTests */,
+				B0A5CAB22672FECC00305BA9 /* HeartRateUITests */,
 				B09AA3E926719155007C2108 /* Products */,
 				B09AA421267193E4007C2108 /* Frameworks */,
 			);
@@ -101,6 +212,10 @@
 				B09AA3E826719155007C2108 /* Sprint_0.app */,
 				B09AA40126719157007C2108 /* Sprint_0Tests.xctest */,
 				B09AA40C26719157007C2108 /* Sprint_0UITests.xctest */,
+				B0A5CA832672FEC900305BA9 /* HeartRate.app */,
+				B0A5CA8F2672FECB00305BA9 /* HeartRate Extension.appex */,
+				B0A5CAA42672FECC00305BA9 /* HeartRateTests.xctest */,
+				B0A5CAAF2672FECC00305BA9 /* HeartRateUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -143,9 +258,53 @@
 		B09AA421267193E4007C2108 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B0A5CAC826733E5400305BA9 /* HealthKit.framework */,
 				B09AA422267193E4007C2108 /* HealthKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B0A5CA842672FEC900305BA9 /* HeartRate */ = {
+			isa = PBXGroup;
+			children = (
+				B0A5CA852672FEC900305BA9 /* Interface.storyboard */,
+				B0A5CA882672FECA00305BA9 /* Assets.xcassets */,
+				B0A5CA8A2672FECA00305BA9 /* Info.plist */,
+			);
+			path = HeartRate;
+			sourceTree = "<group>";
+		};
+		B0A5CA932672FECB00305BA9 /* HeartRate Extension */ = {
+			isa = PBXGroup;
+			children = (
+				B0A5CAC726733E5400305BA9 /* HeartRate Extension.entitlements */,
+				B0A5CA942672FECB00305BA9 /* InterfaceController.swift */,
+				B0A5CA962672FECB00305BA9 /* ExtensionDelegate.swift */,
+				B0A5CA982672FECB00305BA9 /* NotificationController.swift */,
+				B0A5CA9A2672FECB00305BA9 /* ComplicationController.swift */,
+				B0A5CA9C2672FECC00305BA9 /* Assets.xcassets */,
+				B0A5CA9E2672FECC00305BA9 /* Info.plist */,
+				B0A5CA9F2672FECC00305BA9 /* PushNotificationPayload.apns */,
+			);
+			path = "HeartRate Extension";
+			sourceTree = "<group>";
+		};
+		B0A5CAA72672FECC00305BA9 /* HeartRateTests */ = {
+			isa = PBXGroup;
+			children = (
+				B0A5CAA82672FECC00305BA9 /* HeartRateTests.swift */,
+				B0A5CAAA2672FECC00305BA9 /* Info.plist */,
+			);
+			path = HeartRateTests;
+			sourceTree = "<group>";
+		};
+		B0A5CAB22672FECC00305BA9 /* HeartRateUITests */ = {
+			isa = PBXGroup;
+			children = (
+				B0A5CAB32672FECC00305BA9 /* HeartRateUITests.swift */,
+				B0A5CAB52672FECC00305BA9 /* Info.plist */,
+			);
+			path = HeartRateUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -158,10 +317,12 @@
 				B09AA3E426719155007C2108 /* Sources */,
 				B09AA3E526719155007C2108 /* Frameworks */,
 				B09AA3E626719155007C2108 /* Resources */,
+				B0A5CAB92672FECC00305BA9 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				B0A5CAB72672FECC00305BA9 /* PBXTargetDependency */,
 			);
 			name = Sprint_0;
 			productName = Sprint_0;
@@ -204,6 +365,76 @@
 			productReference = B09AA40C26719157007C2108 /* Sprint_0UITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		B0A5CA822672FEC900305BA9 /* HeartRate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0A5CAC42672FECC00305BA9 /* Build configuration list for PBXNativeTarget "HeartRate" */;
+			buildPhases = (
+				B0A5CA812672FEC900305BA9 /* Resources */,
+				B0A5CABC2672FECC00305BA9 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B0A5CA922672FECB00305BA9 /* PBXTargetDependency */,
+			);
+			name = HeartRate;
+			productName = HeartRate;
+			productReference = B0A5CA832672FEC900305BA9 /* HeartRate.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		B0A5CA8E2672FECB00305BA9 /* HeartRate Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0A5CAC32672FECC00305BA9 /* Build configuration list for PBXNativeTarget "HeartRate Extension" */;
+			buildPhases = (
+				B0A5CA8B2672FECB00305BA9 /* Sources */,
+				B0A5CA8C2672FECB00305BA9 /* Frameworks */,
+				B0A5CA8D2672FECB00305BA9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "HeartRate Extension";
+			productName = "HeartRate Extension";
+			productReference = B0A5CA8F2672FECB00305BA9 /* HeartRate Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
+		B0A5CAA32672FECC00305BA9 /* HeartRateTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0A5CAC52672FECC00305BA9 /* Build configuration list for PBXNativeTarget "HeartRateTests" */;
+			buildPhases = (
+				B0A5CAA02672FECC00305BA9 /* Sources */,
+				B0A5CAA12672FECC00305BA9 /* Frameworks */,
+				B0A5CAA22672FECC00305BA9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B0A5CAA62672FECC00305BA9 /* PBXTargetDependency */,
+			);
+			name = HeartRateTests;
+			productName = HeartRateTests;
+			productReference = B0A5CAA42672FECC00305BA9 /* HeartRateTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B0A5CAAE2672FECC00305BA9 /* HeartRateUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0A5CAC62672FECC00305BA9 /* Build configuration list for PBXNativeTarget "HeartRateUITests" */;
+			buildPhases = (
+				B0A5CAAB2672FECC00305BA9 /* Sources */,
+				B0A5CAAC2672FECC00305BA9 /* Frameworks */,
+				B0A5CAAD2672FECC00305BA9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B0A5CAB12672FECC00305BA9 /* PBXTargetDependency */,
+			);
+			name = HeartRateUITests;
+			productName = HeartRateUITests;
+			productReference = B0A5CAAF2672FECC00305BA9 /* HeartRateUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -224,6 +455,20 @@
 						CreatedOnToolsVersion = 12.5;
 						TestTargetID = B09AA3E726719155007C2108;
 					};
+					B0A5CA822672FEC900305BA9 = {
+						CreatedOnToolsVersion = 12.5;
+					};
+					B0A5CA8E2672FECB00305BA9 = {
+						CreatedOnToolsVersion = 12.5;
+					};
+					B0A5CAA32672FECC00305BA9 = {
+						CreatedOnToolsVersion = 12.5;
+						TestTargetID = B0A5CA8E2672FECB00305BA9;
+					};
+					B0A5CAAE2672FECC00305BA9 = {
+						CreatedOnToolsVersion = 12.5;
+						TestTargetID = B0A5CA822672FEC900305BA9;
+					};
 				};
 			};
 			buildConfigurationList = B09AA3E326719155007C2108 /* Build configuration list for PBXProject "Sprint_0" */;
@@ -242,6 +487,10 @@
 				B09AA3E726719155007C2108 /* Sprint_0 */,
 				B09AA40026719157007C2108 /* Sprint_0Tests */,
 				B09AA40B26719157007C2108 /* Sprint_0UITests */,
+				B0A5CA822672FEC900305BA9 /* HeartRate */,
+				B0A5CA8E2672FECB00305BA9 /* HeartRate Extension */,
+				B0A5CAA32672FECC00305BA9 /* HeartRateTests */,
+				B0A5CAAE2672FECC00305BA9 /* HeartRateUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -266,6 +515,37 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B09AA40A26719157007C2108 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0A5CA812672FEC900305BA9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0A5CA892672FECA00305BA9 /* Assets.xcassets in Resources */,
+				B0A5CA872672FEC900305BA9 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0A5CA8D2672FECB00305BA9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0A5CA9D2672FECC00305BA9 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0A5CAA22672FECC00305BA9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0A5CAAD2672FECC00305BA9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -302,6 +582,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B0A5CA8B2672FECB00305BA9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0A5CA992672FECB00305BA9 /* NotificationController.swift in Sources */,
+				B0A5CA9B2672FECB00305BA9 /* ComplicationController.swift in Sources */,
+				B0A5CA972672FECB00305BA9 /* ExtensionDelegate.swift in Sources */,
+				B0A5CA952672FECB00305BA9 /* InterfaceController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0A5CAA02672FECC00305BA9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0A5CAA92672FECC00305BA9 /* HeartRateTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0A5CAAB2672FECC00305BA9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0A5CAB42672FECC00305BA9 /* HeartRateUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -314,6 +621,26 @@
 			isa = PBXTargetDependency;
 			target = B09AA3E726719155007C2108 /* Sprint_0 */;
 			targetProxy = B09AA40D26719157007C2108 /* PBXContainerItemProxy */;
+		};
+		B0A5CA922672FECB00305BA9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B0A5CA8E2672FECB00305BA9 /* HeartRate Extension */;
+			targetProxy = B0A5CA912672FECB00305BA9 /* PBXContainerItemProxy */;
+		};
+		B0A5CAA62672FECC00305BA9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B0A5CA8E2672FECB00305BA9 /* HeartRate Extension */;
+			targetProxy = B0A5CAA52672FECC00305BA9 /* PBXContainerItemProxy */;
+		};
+		B0A5CAB12672FECC00305BA9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B0A5CA822672FEC900305BA9 /* HeartRate */;
+			targetProxy = B0A5CAB02672FECC00305BA9 /* PBXContainerItemProxy */;
+		};
+		B0A5CAB72672FECC00305BA9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B0A5CA822672FEC900305BA9 /* HeartRate */;
+			targetProxy = B0A5CAB62672FECC00305BA9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -332,6 +659,14 @@
 				B09AA3FA26719156007C2108 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		B0A5CA852672FEC900305BA9 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B0A5CA862672FEC900305BA9 /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -571,6 +906,172 @@
 			};
 			name = Release;
 		};
+		B0A5CABA2672FECC00305BA9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				IBSC_MODULE = HeartRate_Extension;
+				INFOPLIST_FILE = HeartRate/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "TarlowTech.Sprint-0.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Debug;
+		};
+		B0A5CABB2672FECC00305BA9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				IBSC_MODULE = HeartRate_Extension;
+				INFOPLIST_FILE = HeartRate/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "TarlowTech.Sprint-0.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Release;
+		};
+		B0A5CABD2672FECC00305BA9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "HeartRate Extension/HeartRate Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "HeartRate Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "TarlowTech.Sprint-0.watchkitapp.watchkitextension";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Debug;
+		};
+		B0A5CABE2672FECC00305BA9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "HeartRate Extension/HeartRate Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "HeartRate Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "TarlowTech.Sprint-0.watchkitapp.watchkitextension";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Release;
+		};
+		B0A5CABF2672FECC00305BA9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = HeartRateTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "TarlowTech.Sprint-0.HeartRateTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HeartRate Extension.appex/HeartRate Extension";
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Debug;
+		};
+		B0A5CAC02672FECC00305BA9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = HeartRateTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "TarlowTech.Sprint-0.HeartRateTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HeartRate Extension.appex/HeartRate Extension";
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Release;
+		};
+		B0A5CAC12672FECC00305BA9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = HeartRateUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "TarlowTech.Sprint-0.HeartRateUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = HeartRate;
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Debug;
+		};
+		B0A5CAC22672FECC00305BA9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = HeartRateUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "TarlowTech.Sprint-0.HeartRateUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = HeartRate;
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -606,6 +1107,42 @@
 			buildConfigurations = (
 				B09AA41C26719157007C2108 /* Debug */,
 				B09AA41D26719157007C2108 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0A5CAC32672FECC00305BA9 /* Build configuration list for PBXNativeTarget "HeartRate Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0A5CABD2672FECC00305BA9 /* Debug */,
+				B0A5CABE2672FECC00305BA9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0A5CAC42672FECC00305BA9 /* Build configuration list for PBXNativeTarget "HeartRate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0A5CABA2672FECC00305BA9 /* Debug */,
+				B0A5CABB2672FECC00305BA9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0A5CAC52672FECC00305BA9 /* Build configuration list for PBXNativeTarget "HeartRateTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0A5CABF2672FECC00305BA9 /* Debug */,
+				B0A5CAC02672FECC00305BA9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0A5CAC62672FECC00305BA9 /* Build configuration list for PBXNativeTarget "HeartRateUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0A5CAC12672FECC00305BA9 /* Debug */,
+				B0A5CAC22672FECC00305BA9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
