@@ -24,13 +24,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     // creat a watch connection variable
     var session:WCSession?
     var isActive:Bool = false // used to check if it actualy connected to an app
-    //create a variable to access the HKHealthStore
+    
+    //create a variable to access the HKHealthStore and associated variables
     var healthStore:HKHealthStore!
-
-    let manager = CLLocationManager()// lcoation manager that directly grabs the location of the devicce
-    var location: CLLocation?// variable that will store the location grabed
-    var loc1:CLLocation?// will store the previous loatation
-    var loc2:CLLocation?// will store the current locaiton
+    var myWorkout: HKWorkout?
+    var startDate = Date()
+    var hearRateAVG = [Double]()
+    var totalCalories:Double?
+    
+    // location variables, manager, loc1/loc2 = calcs for distance, workoutLocation for routeBuilder
+    let manager = CLLocationManager()
+    var location: CLLocation?
+    var loc1:CLLocation?
+    var loc2:CLLocation?
     var workoutLocations = [CLLocation]()
     
     var checkRepeat:Double?// will be used to check if the location is in an infinite loop(only for protyping the gpx file)
@@ -39,19 +45,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     //used to check if the there is a current workout in progress
     var workoutInProgress: Int = 0
-    var myWorkout: HKWorkout?
     
-    var startDate = Date()
     var justStarted:Int?// will be used because of th infinite loop of gpx file and to know             if the location service just started in order to calculate distance
     
-    
+    // start of the API used for temperature, is finished in getWeather func
     var urlString = "http://api.openweathermap.org/data/2.5/weather?"
 
     
+    // storyboards components for health
+    @IBOutlet weak var heartRate: UILabel!
     @IBOutlet weak var workoutSeg: UISegmentedControl!
+    @IBOutlet weak var calorieMSG: UILabel!
     
     @IBOutlet weak var temperature: UILabel!
     
+    // storyBoard components for distance
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var map: MKMapView!// item connected the the mapView item in sotryBoard
     @IBOutlet weak var long: UILabel!// label to display the current locaiton
@@ -60,6 +68,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // sets up the parameters to grab the uesrs location
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
@@ -71,6 +80,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         let typeToRead = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!, HKObjectType.workoutType(), HKSeriesType.workoutRoute()])
         if(HKHealthStore.isHealthDataAvailable()){
             self.healthStore = HKHealthStore()
+            // will ask the user permission to access data
             self.healthStore.requestAuthorization(toShare: typeToShare, read: typeToRead){(success, error) in
             if(!success){
                 print("something went wrong when trying to access healthKit data\n")
@@ -82,67 +92,69 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }else{
             print("healkit is not available on this device")
         }
-        
+    // setting up the watch connection
         if(WCSession.isSupported()){
             session = WCSession.default
             session?.delegate = self
             session?.activate()
         }
-        
-        /* sets the location parameters, am using best accuarcy, but it may drain battery in real world scenarios. Only grabbinng locations when the user is in app*/
     }
     
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations[0]// stores the location in the global variable
-        
-        let coordSpan = MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001)
+        /* sets the map area, using a close span because of gpx file, region surrounded by the location*/
+        let coordSpan = MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001)//closer span since user is mobile
         let coordRegion = MKCoordinateRegion(center: location!.coordinate, span: coordSpan)
         self.map.setRegion(coordRegion, animated: true)
-        /* sets the map area, using a close span because of gpx file, region surrounded by the location*/
         
-        self.getWeather(long: (location?.coordinate.longitude)!, lat: (location?.coordinate.latitude)!)// call the weather function
+        // call the weather function
+        self.getWeather(long: (location?.coordinate.longitude)!, lat: (location?.coordinate.latitude)!)
         
-        
+        // used to track where the uer is, represents current route
         let annot = MKPointAnnotation()
         annot.coordinate = location!.coordinate
         annot.title = location?.description
         self.map.addAnnotation(annot)
-        for (index,val) in locations.enumerated(){
-            print("This is the \(index) locations: \(val.coordinate)")
-        }
-        /* adds an annotation witht the location and description of location*/
         
-        /*
-        print("You are at a latititude of \(String(describing: location?.coordinate.latitude)) and a logntitude of \(String(describing: location?.coordinate.longitude))")
+        
+        //print("You are at a latititude of \(String(describing: location?.coordinate.latitude)) and a logntitude of \(String(describing: location?.coordinate.longitude))")
         let latitude = (location?.coordinate.latitude)!
         let longtitude = (location?.coordinate.longitude)!
         self.lat.text = "\(latitude)"//sets the latitude label to the locations latitude
         self.long.text = "\(longtitude)"// sets the longtitude to the location longtitude
-        for (index,val) in locations.enumerated(){
-            print("These are the locations with a lat of: \(val.coordinate.latitude)\n and a long of: \(val.coordinate.longitude)\n")//loops through the locations
-        }*/
-        /* prints the location in the console and in the label*/
+        
+        // calculates the distance of the user, starts with loc1 with distance =0
+            //after the first, loc2 is current locaiton and loc1 is the past location
         if(self.justStarted == 1){// first location
             loc1 = CLLocation(latitude: (location?.coordinate.latitude)!, longitude: (location?.coordinate.longitude)!)
             distance = 0
             print(" first distance \(distance!)\n")
             self.justStarted! += 1
-            self.distanceLabel.text = String(describing: distance!)
+            DispatchQueue.main.async {
+                self.distanceLabel.text = "\(String(describing: self.distance!)) m"
+            }
         }else{
             loc2 = CLLocation(latitude: (location?.coordinate.latitude)!, longitude: (location?.coordinate.longitude)!)
             distance! += (loc2?.distance(from: loc1!))!
             print("Distance after the first \(distance!)")
             loc1 = loc2
             self.justStarted! += 1
-            self.distanceLabel.text = String(describing: distance!)
+            let showDist = round(distance! * 10)/10
+            DispatchQueue.main.async {
+                self.distanceLabel.text = "\(String(describing: showDist)) m"
+            }
         }
+        
+        //constantly stores the new locaiton to a global array, to creat route
         if(self.workoutSeg.selectedSegmentIndex == 1){
             workoutLocations.append(location!)
         }
        
         
     }
+    
+    // function that takes care of starting/ending the workouts
     @IBAction func creatingWorkouts(_ sender: Any) {
         if(HKHealthStore.isHealthDataAvailable()){
             let routeBuilder = HKWorkoutRouteBuilder(healthStore: self.healthStore, device: nil)
@@ -151,29 +163,32 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 // workout has not started
                 break;
             case 1:
-                self.startDate = Date()
-                    grabHeartRate()
-                
                 //user wants to start the workout
+                self.startDate = Date()
+                grabHeartRate()
                 break;
             default:
+                var tempHeartAVG = 0.0
                 let finishDate = Date()
-                let finalWorkout = HKWorkout(activityType: .running, start: self.startDate, end: finishDate)
-
+                let finalWorkout = HKWorkout(activityType: .running, start: self.startDate, end: finishDate)// workout that is saved to Health app
                 let meta:[String: Any] = [HKMetadataKeyWeatherTemperature: HKQuantity(unit: HKUnit(from: "degF"), doubleValue: Double(self.temperature.text!)!)]
-              
+                
+                //using semaphores because the routBuilder API is async
                 let sem = DispatchSemaphore(value: 0)
-                    routeBuilder.insertRouteData(self.workoutLocations){ (success, error) in
-                       
-                        if(error != nil){
-                            print("there was an error when inserting the route data, with an error code of \(error!.localizedDescription)")
-                        }
-                        if(success){
-                            print("Succesfully added the locations to the route builder")
-                        }
-                        sem.signal()
-                        }
+                
+                //inserts the route data using the global loations array
+                routeBuilder.insertRouteData(self.workoutLocations){ (success, error) in
+                    if(error != nil){
+                        print("there was an error when inserting the route data, with an error code of \(error!.localizedDescription)")
+                    }
+                    if(success){
+                        print("Succesfully added the locations to the route builder")
+                    }
+                    sem.signal()
+                }
                 sem.wait()
+                
+                //saves the workout
                 self.healthStore.save(finalWorkout){ (finish, error) in
                     if(error != nil){
                         print("There was someting wrong when saving the workout to the healStore with error: \(String(describing: error?.localizedDescription))")
@@ -181,19 +196,55 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                     sem.signal()
                 }
                 sem.wait()
-                    routeBuilder.finishRoute(with: finalWorkout, metadata: meta){(route, error) in
+                
+                // adds the route to the workout
+                routeBuilder.finishRoute(with: finalWorkout, metadata: meta){(route, error) in
                         if(error != nil){
                             print("there was an error when finishing the route with error: \(String(describing: error?.localizedDescription))")
                         }
                         sem.signal()
-                    }
+                }
                 sem.wait()
-                    self.healthStore.save(finalWorkout){ (finish, error) in
-                        if(error != nil){
-                            print("There was someting wrong when saving the workout to the healStore with error: \(String(describing: error?.localizedDescription))")
-                        }
-                    }
                 
+                self.healthStore.save(finalWorkout){ (finish, error) in
+                    if(error != nil){
+                        print("There was someting wrong when saving the workout to the healStore with error: \(String(describing: error?.localizedDescription))")
+                    }
+                    guard let valid = self.session else{
+                        print("Something is wrong with the session, after saving the workout")
+                        return
+                    }
+                    if valid.isReachable{
+                        // calculate the average heart rate from the recorded data
+                        for (_,val) in self.hearRateAVG.enumerated(){
+                                tempHeartAVG += val
+                        }
+                        //data sample used to add heartRate data
+                        var myDataSmple = [HKSample]()
+                        // adds the average heart rate to the sample
+                        tempHeartAVG = tempHeartAVG/Double((self.hearRateAVG.count))
+                        let heartType = HKSampleType.quantityType(forIdentifier: .heartRate)
+                        let actualHeartRate = HKQuantity(unit: HKUnit(from: "count/min"), doubleValue: tempHeartAVG)
+                        let heartRateSample = HKQuantitySample(type: heartType!, quantity: actualHeartRate, start: self.startDate, end: finishDate, device: nil, metadata: nil)
+                        myDataSmple.append(heartRateSample)
+                        if(self.totalCalories != nil){
+                            let calorieSample = HKQuantitySample(type: HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!, quantity: HKQuantity(unit: HKUnit.largeCalorie(), doubleValue: self.totalCalories!), start: self.startDate, end: finishDate)
+                            myDataSmple.append(calorieSample)
+                        }
+                        // adds the sample data to the workout
+                        self.healthStore.add(myDataSmple, to: finalWorkout){(success,error) in
+                            if(error != nil){
+                                print("Something went wrong when adding the heart rate sample to the workout")
+                            }
+                        }
+                    }else{
+                        // grab ios data
+                    }
+                }
+                
+                
+                // calls this again to tell the watch to stop tracking
+                grabHeartRate()
                 //user is turning off the wokrout
                 break;
             }
@@ -202,8 +253,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }
     }
     
+    //sends messages to the watch to tell it to start tracking the workout
     func grabHeartRate(){//will be used to grab heart samples
-        guard let validSession = self.session else{
+      guard let validSession = self.session else{
             print("Something is wrong with the session variable")
             return
         }
@@ -215,12 +267,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 let startWorkoutDic:[String:Any] = ["Workout1": "Stop"]
                 validSession.sendMessage(startWorkoutDic, replyHandler: nil, errorHandler: nil)
             }
+        }else{
+            print("The watch is not reachable")
         }
     }
     
     
     func getWeather(long:Double, lat:Double){// will be used to gather the temp of the users location
-        self.urlString += "lat=\(lat)&lon=\(long)&appid=416f2decd9f93e02858f215756151bbd&units=imperial"
+        self.urlString += "lat=\(lat)&lon=\(long)&units=imperial&appid=416f2decd9f93e02858f215756151bbd"
         let realURL = URL(string: self.urlString)!
         let urlSession = URLSession.shared
         
@@ -264,5 +318,23 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         self.isActive = true
     }
     
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        
+        //Heart rate data was sent back
+        if let Rate = message["BPM"] as? Double{
+            self.hearRateAVG.append(Rate)
+            DispatchQueue.main.async {
+                self.heartRate.text = String(Rate)
+            }
+        }
+        
+        //calorire data was sent back
+        if let Cals = message["CAL"] as? Double{
+            DispatchQueue.main.async {
+                self.calorieMSG.text = String(Cals)
+            }
+            self.totalCalories = Cals
+        }
+    }
 }
 

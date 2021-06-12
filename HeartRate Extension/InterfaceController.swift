@@ -15,6 +15,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate, HKWorkoutSe
     @IBOutlet weak var workoutStartMSG: WKInterfaceLabel!
     
     
+    @IBOutlet weak var calorieMSG: WKInterfaceLabel!
     @IBOutlet weak var heartRateMSG: WKInterfaceLabel!
     var session: WCSession?
     var store:HKHealthStore?
@@ -23,6 +24,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate, HKWorkoutSe
     var builder: HKLiveWorkoutBuilder?
     var currentWorkoutInProgress = false
     var startDate:Date?
+    
     override func awake(withContext context: Any?) {
         // Configure interface objects here.
         if(WCSession.isSupported()){
@@ -83,8 +85,8 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate, HKWorkoutSe
             
             if(realMessage == "Start"){
                 //start the apple watch workout
-              
-                    
+                self.setUpHealth()
+                let sem = DispatchSemaphore(value: 0)
                 self.workoutSession?.startActivity(with: Date())
                 self.builder?.beginCollection(withStart: Date()){ (success, error) in
                         guard success else{
@@ -92,11 +94,15 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate, HKWorkoutSe
                             return
                         }
                         DispatchQueue.main.async {
-                            self.workoutStartMSG.setText("Currently grabbing workout data")
+                            self.workoutStartMSG.setText("Workout Start")
                         }
+                    sem.signal()
                     }
-                
-            }else if(realMessage == "Stop"){
+                sem.wait()
+            }
+        }
+        if let realMSG = message["Workout1"] as? String{
+            if(realMSG == "Stop"){
                 self.workoutSession!.end()
                 self.builder?.endCollection(withEnd: Date()){(success, error) in
                     guard success else{
@@ -110,7 +116,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate, HKWorkoutSe
                             return
                         }
                         DispatchQueue.main.async {
-                            self.workoutStartMSG.setText("Finished the workout")
+                            self.workoutStartMSG.setText("Workout end")
                         }
                     }
                 }
@@ -139,19 +145,39 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate, HKWorkoutSe
                 print("Type collected is not quantitiy type")
                 return
             }
+            
             let statistics = workoutBuilder.statistics(for: quantityType)
+            
             switch statistics?.quantityType{
-            case HKObjectType.quantityType(forIdentifier: .heartRate):
-                guard let validSession = self.session else{
-                    print("Something is wrong with the session")
-                    return
-                }
-                let heartUnit = HKUnit.count().unitDivided(by: HKUnit.minute())
-                let heartRate = statistics?.mostRecentQuantity()?.doubleValue(for: heartUnit)
-                let dic:[String:Double] = ["BPM": heartRate!]
+                case HKObjectType.quantityType(forIdentifier: .heartRate):
+                    guard let validSession = self.session else{
+                        print("Something is wrong with the session")
+                        return
+                    }
+                    let heartUnit = HKUnit.count().unitDivided(by: HKUnit.minute())
+                    let heartRate = statistics?.mostRecentQuantity()?.doubleValue(for: heartUnit)
+                    let dic:[String:Double] = ["BPM": heartRate!]
+                    session?.sendMessage(dic, replyHandler: nil, errorHandler:{(error) in
+                        if(error != nil){
+                            print("Something went wrong sending the message to the heart rate to the phone")
+                        }
+                    })
+                    DispatchQueue.main.async {
+                        self.heartRateMSG.setText(String(heartRate!))
+                    }
+                    break
+            case HKObjectType.quantityType(forIdentifier: .activeEnergyBurned):
+                let calBurned  = statistics?.mostRecentQuantity()?.doubleValue(for: HKUnit.largeCalorie())
                 DispatchQueue.main.async {
-                    self.heartRateMSG.setText(String(heartRate!))
+                    self.calorieMSG.setText(String(calBurned!))
                 }
+                
+                session?.sendMessage(["CAL": calBurned], replyHandler: nil, errorHandler: {(error) in
+                    print("There was an error when sending the calories burned from the watch")
+                })
+                break
+            case HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning):
+                
                 break
             default:
                 break
