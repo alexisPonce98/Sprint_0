@@ -26,6 +26,7 @@ class NotificationController: WKUserNotificationInterfaceController {
         // This method is called when watch view controller is no longer visible
     }
 
+    @available(watchOSApplicationExtension 3.0, *)
     override func didReceive(_ notification: UNNotification) {
         // This method is called when a notification needs to be presented.
         // Implement it if you use a dynamic notification interface.

@@ -10,6 +10,7 @@ import Foundation
 import HealthKit
 import WatchConnectivity
 
+@available(watchOSApplicationExtension 5.0, *)
 class InterfaceController: WKInterfaceController, WCSessionDelegate, HKWorkoutSessionDelegate, HKLiveWorkoutBuilderDelegate {
     
     @IBOutlet weak var workoutStartMSG: WKInterfaceLabel!
@@ -148,7 +149,46 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate, HKWorkoutSe
             
             let statistics = workoutBuilder.statistics(for: quantityType)
             
-            switch statistics?.quantityType{
+            if #available(watchOSApplicationExtension 7.0, *){
+                
+                    switch statistics?.quantityType{
+                    case HKObjectType.quantityType(forIdentifier: .heartRate):
+                        guard let validSession = self.session else{
+                            print("Something is wrong with the session")
+                            return
+                        }
+                        let heartUnit = HKUnit.count().unitDivided(by: HKUnit.minute())
+                        let heartRate = statistics?.mostRecentQuantity()?.doubleValue(for: heartUnit)
+                        let dic:[String:Double] = ["BPM": heartRate!]
+                        session?.sendMessage(dic, replyHandler: nil, errorHandler:{(error) in
+                            if(error != nil){
+                                print("Something went wrong sending the message to the heart rate to the phone")
+                            }
+                        })
+                        DispatchQueue.main.async {
+                            self.heartRateMSG.setText(String(heartRate!))
+                        }
+                        break
+                    case HKObjectType.quantityType(forIdentifier: .activeEnergyBurned):
+                        let calBurned  = statistics?.mostRecentQuantity()?.doubleValue(for: HKUnit.largeCalorie())
+                        DispatchQueue.main.async {
+                            self.calorieMSG.setText(String(calBurned!))
+                        }
+                        
+                        session?.sendMessage(["CAL": calBurned], replyHandler: nil, errorHandler: {(error) in
+                            print("There was an error when sending the calories burned from the watch")
+                        })
+                        break
+                    case HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning):
+                        
+                        break
+                    case HKObjectType.quantityType(forIdentifier: .walkingStepLength):
+                        break
+                    default:
+                        break
+                    }
+            }else{
+                switch statistics?.quantityType{
                 case HKObjectType.quantityType(forIdentifier: .heartRate):
                     guard let validSession = self.session else{
                         print("Something is wrong with the session")
@@ -166,22 +206,24 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate, HKWorkoutSe
                         self.heartRateMSG.setText(String(heartRate!))
                     }
                     break
-            case HKObjectType.quantityType(forIdentifier: .activeEnergyBurned):
-                let calBurned  = statistics?.mostRecentQuantity()?.doubleValue(for: HKUnit.largeCalorie())
-                DispatchQueue.main.async {
-                    self.calorieMSG.setText(String(calBurned!))
+                case HKObjectType.quantityType(forIdentifier: .activeEnergyBurned):
+                    let calBurned  = statistics?.mostRecentQuantity()?.doubleValue(for: HKUnit.largeCalorie())
+                    DispatchQueue.main.async {
+                        self.calorieMSG.setText(String(calBurned!))
+                    }
+                    
+                    session?.sendMessage(["CAL": calBurned], replyHandler: nil, errorHandler: {(error) in
+                        print("There was an error when sending the calories burned from the watch")
+                    })
+                    break
+                case HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning):
+                    
+                    break
+                default:
+                    break
                 }
-                
-                session?.sendMessage(["CAL": calBurned], replyHandler: nil, errorHandler: {(error) in
-                    print("There was an error when sending the calories burned from the watch")
-                })
-                break
-            case HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning):
-                
-                break
-            default:
-                break
             }
+            
             
         }
     }

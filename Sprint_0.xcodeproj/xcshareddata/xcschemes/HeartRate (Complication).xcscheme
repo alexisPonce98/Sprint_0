@@ -56,8 +56,10 @@
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "32"
       notificationPayloadFile = "HeartRate Extension/PushNotificationPayload.apns">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.Carousel"
+         RemotePath = "/Sprint_0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B0A5CA822672FEC900305BA9"
@@ -65,7 +67,7 @@
             BlueprintName = "HeartRate"
             ReferencedContainer = "container:Sprint_0.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -74,8 +76,10 @@
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES"
       launchAutomaticallySubstyle = "32">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.Carousel"
+         RemotePath = "/Sprint_0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B0A5CA822672FEC900305BA9"
@@ -83,7 +87,16 @@
             BlueprintName = "HeartRate"
             ReferencedContainer = "container:Sprint_0.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "B0A5CA822672FEC900305BA9"
+            BuildableName = "HeartRate.app"
+            BlueprintName = "HeartRate"
+            ReferencedContainer = "container:Sprint_0.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

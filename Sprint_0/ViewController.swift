@@ -10,6 +10,8 @@ import CoreLocation
 import HealthKit
 import MapKit
 import WatchConnectivity
+import CoreMotion
+
 class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate{
     
     // structs that will be used to gather the user tempereature based on the coordinates
@@ -20,6 +22,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         var temp: Double?
     }
     
+    var timer: Timer?
+    @IBOutlet weak var timerMSG: UILabel!
+    var mili = 0.00
+    var sec = 0
+    var min = 0
+    var hour = 0
     
     // creat a watch connection variable
     var session:WCSession?
@@ -32,12 +40,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     var hearRateAVG = [Double]()
     var totalCalories:Double?
     
+    //for the live workout recording from the iphone
+    var liveCongifuration = HKWorkoutConfiguration()
+    var inProgress = false
+    
+    //used to grab the user change in altitude
+    var altitude = CMAltimeter()
+    var altitudeCounter = 0
+    @IBOutlet weak var altitudeMSG: UILabel!
+    var cmManager:CMMotionManager?
+    var pedometer:CMPedometer?
+    @IBOutlet weak var pedometerMSG: UILabel!
+    @IBOutlet weak var cadenceMSG: UILabel!
+    @IBOutlet weak var paceMSG: UILabel!
+    @IBOutlet weak var distancePedometerMSG: UILabel!
     // location variables, manager, loc1/loc2 = calcs for distance, workoutLocation for routeBuilder
     let manager = CLLocationManager()
     var location: CLLocation?
     var loc1:CLLocation?
     var loc2:CLLocation?
     var workoutLocations = [CLLocation]()
+    
+    @IBOutlet weak var trueHeadingMSG: UILabel!
+    @IBOutlet weak var magHeadingMSG: UILabel!
+    
     
     var checkRepeat:Double?// will be used to check if the location is in an infinite loop(only for protyping the gpx file)
     var distance:Double?// will be adding the distance between annotations
@@ -73,6 +99,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
+        if CLLocationManager.headingAvailable(){
+            manager.startUpdatingHeading()
+        }else{
+            magHeadingMSG.text = "There is no compass on this device"
+            trueHeadingMSG.text = "There is no compass on this device"
+        }
         self.justStarted = 1;
         
         //setting up the healthStore and permissoins
@@ -98,8 +130,27 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             session?.delegate = self
             session?.activate()
         }
+        
+        //CoreMotion setup
+        self.cmManager = CMMotionManager()
     }
     
+    // listens to the users compass direction
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        if CLLocationManager.headingAvailable(){
+            let magHeading = newHeading.magneticHeading
+            let trueHead = newHeading.trueHeading
+            DispatchQueue.main.async {
+                self.magHeadingMSG.text = "\(magHeading)"
+                self.trueHeadingMSG.text = "\(trueHead)"
+            }
+        }else{
+            DispatchQueue.main.async {
+                self.magHeadingMSG.text = "There is no compass on this device"
+                self.trueHeadingMSG.text = "There is no compass on this device"
+            }
+        }
+    }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations[0]// stores the location in the global variable
@@ -110,20 +161,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
         // call the weather function
         self.getWeather(long: (location?.coordinate.longitude)!, lat: (location?.coordinate.latitude)!)
-        
         // used to track where the uer is, represents current route
         let annot = MKPointAnnotation()
         annot.coordinate = location!.coordinate
         annot.title = location?.description
         self.map.addAnnotation(annot)
-        
-        
+        calculateElevation(alt: location!.altitude)
         //print("You are at a latititude of \(String(describing: location?.coordinate.latitude)) and a logntitude of \(String(describing: location?.coordinate.longitude))")
         let latitude = (location?.coordinate.latitude)!
         let longtitude = (location?.coordinate.longitude)!
         self.lat.text = "\(latitude)"//sets the latitude label to the locations latitude
         self.long.text = "\(longtitude)"// sets the longtitude to the location longtitude
-        
+    
         // calculates the distance of the user, starts with loc1 with distance =0
             //after the first, loc2 is current locaiton and loc1 is the past location
         if(self.justStarted == 1){// first location
@@ -137,7 +186,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         }else{
             loc2 = CLLocation(latitude: (location?.coordinate.latitude)!, longitude: (location?.coordinate.longitude)!)
             distance! += (loc2?.distance(from: loc1!))!
-            print("Distance after the first \(distance!)")
             loc1 = loc2
             self.justStarted! += 1
             let showDist = round(distance! * 10)/10
@@ -154,6 +202,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
     }
     
+    
     // function that takes care of starting/ending the workouts
     @IBAction func creatingWorkouts(_ sender: Any) {
         if(HKHealthStore.isHealthDataAvailable()){
@@ -166,8 +215,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                 //user wants to start the workout
                 self.startDate = Date()
                 grabHeartRate()
+                startTimer()
+                setupMotion()
                 break;
             default:
+                stopTimer()
                 var tempHeartAVG = 0.0
                 let finishDate = Date()
                 let finalWorkout = HKWorkout(activityType: .running, start: self.startDate, end: finishDate)// workout that is saved to Health app
@@ -239,6 +291,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
                         }
                     }else{
                         // grab ios data
+                        
                     }
                 }
                 
@@ -252,6 +305,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             //HealthStore is not available
         }
     }
+    
     
     //sends messages to the watch to tell it to start tracking the workout
     func grabHeartRate(){//will be used to grab heart samples
@@ -300,6 +354,93 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     }
     
     
+    func calculateElevation(alt:CLLocationDistance){
+        //calculating elevation and change
+        // might needt to imlement CMAltitudeData
+        //CMAltitudeData
+        
+        var alt1 = 0.0
+        var changeOfAltitude:Double
+        
+        if self.altitudeCounter == 0{
+            self.altitudeMSG.text = "\(alt)"
+            changeOfAltitude = 0
+            alt1 = alt
+            self.altitudeCounter += 1
+            
+        }else{
+            self.altitudeMSG.text = "\(alt)"
+            changeOfAltitude = alt - alt1
+            alt1 = alt
+        }
+    }
+    
+    
+    func startTimer(){// will start the timer
+        self.timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(showTimer), userInfo: nil, repeats: true)
+    }
+    
+    func stopTimer(){
+        self.timer?.invalidate()
+    }
+    
+    @objc func showTimer(){// shows the timer to the UI
+        self.mili += 0.01
+        self.mili = round(self.mili * 100)/100
+        if self.mili == 1.00{
+            self.mili = 0.00
+            self.sec += 1
+        
+            if self.sec == 60{
+                self.sec = 0
+                self.min += 1
+        
+                if self.min == 60{
+                        self.min = 0
+                        self.hour += 1
+                }
+            }
+        }
+        DispatchQueue.main.async {
+            var printMili = Int(self.mili*100)
+            if(self.hour < 10){
+                if(self.min < 10){
+                    if(self.sec < 10){
+                        self.timerMSG.text = "0\(self.hour):0\(self.min):0\(self.sec).\(printMili)"
+                    }else{
+                        self.timerMSG.text = "0\(self.hour):0\(self.min):\(self.sec).\(printMili)"
+                    }
+                }else{
+                    self.timerMSG.text = "0\(self.hour):\(self.min):\(self.sec).\(printMili)"
+                }
+            }else{
+                self.timerMSG.text = "\(self.hour):\(self.min):\(self.sec).\(printMili)"
+            }
+        }
+    }
+    
+    
+    func setupMotion(){
+        if CMPedometer.isPedometerEventTrackingAvailable(){
+            self.pedometer = CMPedometer()
+            pedometer?.startUpdates(from: Date()){(data, error) in
+                guard let pedometerData = data, error == nil else { print("There was an error with the pedometer"); return}
+                DispatchQueue.main.async {
+                    self.pedometerMSG.text = pedometerData.numberOfSteps.stringValue
+                    self.cadenceMSG.text = "\(String(describing: pedometerData.currentCadence))"
+                    self.paceMSG.text = "\(String(describing: pedometerData.currentPace))"
+                    self.distancePedometerMSG.text = "\(String(describing: pedometerData.distance))"
+                }
+            }
+        }else{
+            DispatchQueue.main.async {
+                self.pedometerMSG.text = "No Pedometer"
+            }
+            print("The current device does not have a pedometer")
+        }
+    }
+    
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)// if there is an error grabbing the locations this will print it
     }
@@ -310,13 +451,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         
     }
     
+    
     func sessionDidDeactivate(_ session: WCSession) {
         
     }
     
+    
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         self.isActive = true
     }
+    
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         
@@ -336,5 +480,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
             self.totalCalories = Cals
         }
     }
+    
 }
 
