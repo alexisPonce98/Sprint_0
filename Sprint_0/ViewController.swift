@@ -11,8 +11,9 @@ import HealthKit
 import MapKit
 import WatchConnectivity
 import CoreMotion
-
-class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate{
+import AVFoundation
+import AVKit
+class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     // structs that will be used to gather the user tempereature based on the coordinates
     struct weather:Decodable{
@@ -22,6 +23,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
         var temp: Double?
     }
     
+    var image = UIImagePickerController()
+    var captureSession:AVCaptureSession!
+    var videoPreviewLayer: AVCaptureVideoPreviewLayer!
+    @IBOutlet weak var backGroundView: UIView!
+    
+    
+    // stuff for the image capture
+    @IBOutlet weak var realImage: UIImageView!
     var timer: Timer?
     @IBOutlet weak var timerMSG: UILabel!
     var mili = 0.00
@@ -421,17 +430,26 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     
     
     func setupMotion(){
+        let sem = DispatchSemaphore(value: 0)
         if CMPedometer.isPedometerEventTrackingAvailable(){
             self.pedometer = CMPedometer()
             pedometer?.startUpdates(from: Date()){(data, error) in
                 guard let pedometerData = data, error == nil else { print("There was an error with the pedometer"); return}
                 DispatchQueue.main.async {
-                    self.pedometerMSG.text = pedometerData.numberOfSteps.stringValue
-                    self.cadenceMSG.text = "\(String(describing: pedometerData.currentCadence))"
-                    self.paceMSG.text = "\(String(describing: pedometerData.currentPace))"
-                    self.distancePedometerMSG.text = "\(String(describing: pedometerData.distance))"
+                    self.pedometerMSG.text = "\(String(describing: pedometerData.numberOfSteps))"
+                    if let cadence = pedometerData.currentCadence{
+                        self.cadenceMSG.text = "\(String(describing: cadence.stringValue))"
+                    }
+                    if let pace = pedometerData.currentPace{
+                        self.paceMSG.text = "\(String(describing: pedometerData.currentPace!))"
+                    }
+                    if let distance = pedometerData.distance{
+                        self.distancePedometerMSG.text = "\(String(describing: pedometerData.distance!))"
+                    }
                 }
+
             }
+           
         }else{
             DispatchQueue.main.async {
                 self.pedometerMSG.text = "No Pedometer"
@@ -444,6 +462,109 @@ class ViewController: UIViewController, CLLocationManagerDelegate, WCSessionDele
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)// if there is an error grabbing the locations this will print it
     }
+    
+    
+    @IBAction func addImage(_ sender: Any) {
+        let alert = UIAlertController(title: "Data Source", message: "Please select from where you would like to grab your images from", preferredStyle: .alert)
+        let action1 = UIAlertAction(title: "Photo Library", style: .default){(action) in
+            if(UIImagePickerController.isSourceTypeAvailable(.photoLibrary)){
+                print("Grabbing photo library")
+                self.image.sourceType = .photoLibrary
+                self.image.delegate = self
+                self.image.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
+                self.image.modalPresentationStyle = .popover
+                self.present(self.image, animated: true, completion: nil)
+            }else{
+                print("Photo library was not available")
+                let cancelAlert = UIAlertController(title: "Photo Library is not available on this device", message: " most likely did not allow permissions", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "OK", style: .default){(action) in
+                    
+                }
+                cancelAlert.addAction(cancelAction)
+                self.present(cancelAlert, animated: true, completion: nil)
+            }
+        }
+        let action2 = UIAlertAction(title: "Camera", style: .default){(action) in
+            if(UIImagePickerController.isSourceTypeAvailable(.camera)){
+                self.image.sourceType = .camera
+                self.image.delegate = self
+                self.image.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera)!
+                self.image.modalPresentationStyle = .popover
+                self.present(self.image, animated: true, completion: nil)
+            }else{
+                print("Camera was not available")
+                let cancelAlert = UIAlertController(title: "Camera was not available", message: "Something went wrong when loading the camera up", preferredStyle: .alert)
+                let canAction1 = UIAlertAction(title: "OK", style: .default){(action) in
+                }
+                cancelAlert.addAction(canAction1)
+                self.present(cancelAlert, animated: true, completion: nil)
+            }
+        }
+        let action3 = UIAlertAction(title: "Cancel", style: .default){(action) in
+            
+        }
+        alert.addAction(action1)
+        alert.addAction(action2)
+        alert.addAction(action3)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let IMG = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+            print("There was no image selected")
+            return
+        }
+        self.realImage.image = IMG
+        self.dismiss(animated: true, completion: nil)
+        
+    }
+    
+    
+    @IBAction func backGroundImage(_ sender: Any) {
+        self.captureSession = AVCaptureSession()
+        self.captureSession.sessionPreset = .medium
+        let cam = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .back)
+        let realCamera = cam.devices.first!
+        guard let camera = AVCaptureDevice.default(for: AVMediaType.video) else {
+            print("Unable to use the back camera")
+            return
+        }
+        do{
+            if(realCamera.isFocusModeSupported(.continuousAutoFocus))   {
+                try! realCamera.lockForConfiguration()
+                realCamera.focusMode = .continuousAutoFocus
+                realCamera.unlockForConfiguration()
+            }
+            let input = try AVCaptureDeviceInput(device: realCamera)
+            if self.captureSession.canAddInput(input){
+                self.captureSession.addInput(input)
+            }
+        }catch let error{
+            print("There was an error when attaching the camera input, error message; \(error.localizedDescription)")
+        }
+        self.videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        self.videoPreviewLayer.videoGravity = .resizeAspectFill
+        videoPreviewLayer.connection?.videoOrientation = .portrait
+       // self.view.layer.addSublayer(self.videoPreviewLayer)
+        
+        self.backGroundView.layer.addSublayer(self.videoPreviewLayer)
+        self.view.addSubview(self.backGroundView)
+        self.view.sendSubviewToBack(self.backGroundView)
+        self.backGroundView.isHidden = false
+        DispatchQueue.main.async {
+            self.captureSession.startRunning()
+            self.videoPreviewLayer.frame = self.view.bounds
+        }
+    }
+    
+    @IBAction func stopBackgroundView(_ sender: Any) {
+        DispatchQueue.main.async {
+            self.backGroundView.isHidden = true
+            self.captureSession.stopRunning()
+        }
+    }
+    
+    
     
     //MARK: - Watch session delegate methods
     
